@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// use Admin\MockApiController;
 use Admin\RoleController;
 use Admin\UserController;
 
@@ -27,5 +28,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'auth'], fu
     // Roles And Permission Routes
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+
+    Route::get('/mock-api-build', [App\Http\Controllers\Admin\MockApiController::class, 'mockApi'])->name('mock.api');
+    Route::get('/mock-api-list', [App\Http\Controllers\Admin\MockApiController::class, 'mockApiList'])->name('mock.api.list');
+    Route::post('/mock-api-build', [App\Http\Controllers\Admin\MockApiController::class, 'mockApiStore'])->name('mock.api');
 
 });

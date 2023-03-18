@@ -17,6 +17,7 @@ class CreateApiUrlsTable extends Migration
             $table->id();
             $table->string('url');
             $table->string('model');
+            $table->string('method');
             $table->text('input_field');
             $table->timestamps();
         });
