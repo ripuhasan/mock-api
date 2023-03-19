@@ -8,77 +8,76 @@
         <!-- /# row -->
         <section id="main-content">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-title">
-                            <h4>{{ $info->page_title }}</h4>
-                            
+                  @foreach ($rows as $row)
+
+                  <div class="col-lg-12">
+                        <div class="card">
+                              
+                              <div class="card-body">
+                                    <div class="row">
+                                          <div class="col-md-4">
+                                                <div class="table-responsive">
+                                                    @php
+                                                        $model = Str::plural(strtolower(str_replace(" ", "", $row->model)));
+                                                    @endphp
+                                                      <table class="table table-striped">
+                                                            <thead>
+                                                                  <tr>
+                                                                  <th>
+                                                                    @if($row->method == 'apiResource')
+                                                                    <code>
+                                                                    [GET] {{ $url }}/api/{{ $row->url }} <br><!---List Get Method--->
+                                                                    [POST] {{ $url }}/api/{{ $row->url }} <br>    <!---Store Post Method--->
+                                                                    [GET] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br><!---Show Get Method--->
+                                                                    [PUT] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Update Put Method--->
+                                                                    [DELETE] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Delete DELETE Method--->
+                                                                    </code>
+                                                                @else
+                                                                {{ $url }}/api/{{ $row->url }}
+                                                                @endif
+                                                                  </th>
+                                                                  </tr>
+                                                            </thead>
+                                                      <tbody>
+                                                            <tr>
+                                                                  <h5>Api</h5>
+                                                            </tr>
+                                                            </tbody>
+                                                      </table>
+                                                </div>
+                                          </div>
+                                          <div class="col-md-8">
+                                                <div class="example mb-10">
+                                                    <h5>Body</h5>
+
+                                                      <div class="example-code">
+                                                          <span class="example-copy" data-toggle="tooltip" title="Copy code"></span>
+                                                          <div class="example-highlight">
+                                                              <pre>
+                                                       <code>
+                                                        <?php
+                                                        if (!file_exists($model.'_'.$row->id.'.json')) {
+                                                            echo "No json data found!";
+                                                        }else{
+                                                            $json = file_get_contents($model.'_'.$row->id.'.json'); 
+                                                            $json_decode = json_decode($json, true); 
+                                                            $limited_data = array_slice($json_decode, 0, 2); 
+                    
+                                                            echo json_encode($limited_data, JSON_PRETTY_PRINT);
+                                                        }
+                                                        ?>
+                  
+                                                       </code>
+                                                   </pre>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                          </div>
+                                    </div>
+                              </div>
                         </div>
-                        <div class="card-body">
-                            @if(count($rows) > 0)
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                          <tr>
-                                                <th>#</th>
-                                                <th>Api</th>
-                                                <th>Method</th>
-                                                <th>Input Field</th>
-                                                <th>Created At</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                          @foreach($rows as $key=>$row)
-                                          <tr>
-                                              <td>#{{ $key + 1 }}</td>
-                                              <td>{{ $row->url }}</td>
-                                              <td>{{ $row->method }}</td>
-                                              <td>{{ $row->input_field }}</td>
-                                              <td>{{ $row->created_at->diffForHumans() }}</td>
-                                              <td class="d-flex justify-content-end">
-                                                  <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
-                                                        @can($info->access.'-view')
-                                                        <li class="p-1">
-                                                            <a href="" class="btn btn-sm btn-primary">
-                                                                  <i class="ti-eye"></i></a>
-                                                        </li>
-                                                        @endcan
-                                                        @can($info->access.'-edit')
-                                                        <li class="p-1">
-                                                            <a href="" class="btn btn-sm btn-warning">
-                                                                  <i class="ti-pencil-alt"></i></a>
-                                                        </li>
-                                                        @endcan
-                                                        @can($info->access.'-destroy')
-                                                        @if($row->deletable == true)
-                                                        <li class="p-1">
-                                                            <a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal-{{ $row->id }}">
-                                                                  <i class="ti-trash"></i></a>
-                                                        </li>
-                                                        @endcan
-                                                        @endif
-                                                    </ul>
-                                              </td>
-                                          </tr>
-                                          @include('admin.layouts.inc.delete')
-                                      @endforeach
-                            @else
-                                <div class="alert alert-custom alert-notice alert-light-success fade show mb-5 text-center" role="alert">
-                                        <div class="alert-icon">
-                                            <i class="flaticon-questions-circular-button"></i>
-                                        </div>
-                                        <div class="alert-text text-dark">
-                                            No Data Found..!
-                                        </div>
-                                </div>
-                            @endif
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+                @endforeach 
             </div>
         </section>
     </div>

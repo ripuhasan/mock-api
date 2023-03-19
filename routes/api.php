@@ -19,3 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('admin/user/info', Api\UserInfoController::class);
+Route::apiResource('admin/v1/test', Api\TestController::class);
+Route::apiResource('new/test', Api\NewTestController::class);

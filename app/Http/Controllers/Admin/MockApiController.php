@@ -48,7 +48,7 @@ class MockApiController extends Controller
         }else{
            $db_id = ApiUrl::create([
                 'url' => $request->url,
-                'model' => $request->model,
+                'model' => str_replace(" ", "", $request->model),
                 'input_field' => $request->input_field,
                 'method' => 'apiResource',
             ]);
@@ -79,7 +79,8 @@ class MockApiController extends Controller
         $info->route_store = $this->route_store;
         $info->route_destroy = $this->route_store;
 
+        $url = url('/');
         $rows = ApiUrl::get();
-        return view('admin.mock-api.index', compact('rows', 'info'));
+        return view('admin.mock-api.index', compact('rows', 'info', 'url'));
     }
 }
