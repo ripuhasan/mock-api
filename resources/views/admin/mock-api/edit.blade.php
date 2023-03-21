@@ -93,7 +93,7 @@ userAgent, md5, sha1, sha256, locale, languageCode, currencyCode
                                     <div class="col-md-6">
                                           <div class="form-group">
                                                 <label>How many data *</label>
-                                                <input type="number" class="form-control" name="how_many_data" value="1" min="1" required>
+                                                <input type="number" class="form-control" name="how_many_data" value="{{ $row->total_data }}" min="1" required>
                                           </div>
                                     </div>
                               </div>
@@ -102,7 +102,7 @@ userAgent, md5, sha1, sha256, locale, languageCode, currencyCode
                                     <div class="col-sm-9">
                                         <div class="layout-button mt-25">
                                             <input type="button" class="btn btn-default btn-squared border-normal bg-normal px-20" value="Cancel">
-                                            <input type="submit" class="btn btn-primary btn-default btn-squared px-30" value="Save">
+                                            <input type="submit" class="btn btn-primary btn-default btn-squared px-30" value="Update">
                                         </div>
                                     </div>
                                 </div>

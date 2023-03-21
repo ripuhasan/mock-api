@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\ApiUrl;
 use GenerateFile;
 use stdClass;
@@ -76,7 +77,7 @@ class MockApiController extends Controller
         $info = new stdClass();
         $info->access = $this->access;
         $info->key_word = $this->key_word;
-        $info->page_title = "Mock Api Create";
+        $info->page_title = "Mock Api List";
         $info->route_store = $this->route_store;
         $info->route_destroy = $this->route_destroy;
 
@@ -90,7 +91,7 @@ class MockApiController extends Controller
         $info = new stdClass();
         $info->access = $this->access;
         $info->key_word = $this->key_word;
-        $info->page_title = "Mock Api Create";
+        $info->page_title = "Mock Api Edit";
         $info->route_update = $this->route_update;
 
         $row = ApiUrl::findOrFail($id);
@@ -99,11 +100,111 @@ class MockApiController extends Controller
 
     public function MockApiUpdate(Request $request, $id)
     {
-        return "Mock Api Update Method";
+        $db = ApiUrl::findOrFail($id);
+
+        //Old controller
+        $old_controller = 'Api\\'.ucfirst(str_replace(" ", "", $db->model)).'Controller::class';
+
+        //Update Controller
+        $update_controller = 'Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
+
+        //Update Api Route
+        // Get the file contents
+        $apiRoute = file_get_contents('../routes/api.php');
+
+        // Define the old string and new string
+        $search_url = "Route::apiResource('$db->url', $old_controller);";
+        $update_url = "Route::apiResource('$request->url', $update_controller);";
+
+        // Replace the old string with new string
+        $url_update = str_replace($search_url, $update_url, $apiRoute);
+
+        // Write the updated content to the file
+        file_put_contents('../routes/api.php', $url_update);
+
+        //Old Controller
+        $oldController = ucfirst(str_replace(" ", "", $db->model)).'Controller';
+
+        //Old json data
+        $old_json_data = Str::plural(strtolower(str_replace(" ", "", $db->model)));
+
+        //Controller File Delete
+        if(file_exists("../app/Http/Controllers/Api/{$oldController}.php")){
+            unlink("../app/Http/Controllers/Api/{$oldController}.php");
+        }
+        //Json file delete
+        if(file_exists("{$old_json_data}_{$db->id}.json")){
+            unlink("{$old_json_data}_{$db->id}.json");
+        }
+
+        //Update database
+        if($db){
+            $db->update([
+                'url' => $request->url,
+                'model' => $request->model,
+                'method' => 'apiResource',
+                'input_field' => $request->input_field,
+            ]);
+            // return redirect()->back()->with('message', 'Your api update success!');
+        }else{
+           $db = ApiUrl::create([
+                'url' => $request->url,
+                'model' =>  $request->model,
+                'method' => 'apiResource',
+                'input_field' => $request->input_field,
+            ]);
+        }
+
+        //New url
+        $url = $request->url;
+        //New Controller
+        $controller = 'Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
+        
+        //Generate Api Url
+       // GenerateFile::generateApi($url, $controller);
+
+        //Generate Api Controller
+        GenerateFile::generateApiController($request, $db);
+
+        return redirect()->back()->with('message', 'Your api update success!');
+
     }
 
     public function MockApiDestroy($id)
     {
-        return "Mock Api Destroy Method";
+        $row = ApiUrl::findOrFail($id);
+
+        $controller = ucfirst(str_replace(" ", "", $row->model)).'Controller';
+        $json = Str::plural(strtolower(str_replace(" ", "", $row->model)));
+
+        //Controller File Delete
+        if(file_exists("../app/Http/Controllers/Api/{$controller}.php")){
+            unlink("../app/Http/Controllers/Api/{$controller}.php");
+        }
+
+        //Json file delete
+        if(file_exists("{$json}_{$row->id}.json")){
+            unlink("{$json}_{$row->id}.json");
+        }
+
+        //Url Remove
+        // Get the file contents
+        $apiRoute = file_get_contents('../routes/api.php');
+
+        $url_controller = $controller."::class);";
+
+        // Define the old string and new string
+        $search_url = "Route::apiResource('$row->url', Api\\$url_controller";
+
+        // Replace the old string with new string
+        $url_remove = str_replace($search_url, '', $apiRoute);
+
+        // Write the updated content to the file
+        file_put_contents('../routes/api.php', $url_remove);
+
+        $row->delete();
+
+        return redirect()->back()->with('message', 'Api delete success!');
+
     }
 }

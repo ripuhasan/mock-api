@@ -77,7 +77,7 @@
                                                    </pre>
                                                           </div>
                                                       </div>
-                                                  </div>
+                                                </div>
                                           </div>
                                     </div>
                               </div>
@@ -85,6 +85,15 @@
                   </div>
                   @include('admin.layouts.inc.delete')
                 @endforeach 
+            </div>
+            @if(count($rows) <= 0)
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="text-center">No api create! <a class="btn btn-sm btn-primary" href="{{ route('admin.mock.api') }}">Create api</a> </h5>
+                </div>
+            </div>
+            @endif
+                </div>
             </div>
         </section>
     </div>
