@@ -32,5 +32,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'auth'], fu
     Route::get('/mock-api-build', [App\Http\Controllers\Admin\MockApiController::class, 'mockApi'])->name('mock.api');
     Route::get('/mock-api-list', [App\Http\Controllers\Admin\MockApiController::class, 'mockApiList'])->name('mock.api.list');
     Route::post('/mock-api-build', [App\Http\Controllers\Admin\MockApiController::class, 'mockApiStore'])->name('mock.api');
+   
+    Route::get('mock-api-edit/{id}', [App\Http\Controllers\Admin\MockApiController::class, 'MockApiEdit'])->name('mock.api.edit');
+    Route::put('mock-api-update/{id}', [App\Http\Controllers\Admin\MockApiController::class, 'MockApiUpdate'])->name('mock.api.update');
+    Route::delete('mock-api-destroy/{id}', [App\Http\Controllers\Admin\MockApiController::class, 'MockApiDestroy'])->name('mock.api.destroy');
 
 });

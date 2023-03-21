@@ -12,7 +12,14 @@
 
                   <div class="col-lg-12">
                         <div class="card">
-                              
+                            <div class="text-right mt-2 mr-2">
+                                <a href="{{ route('admin.mock.api.edit', $row->id) }}" class="btn btn-sm btn-primary"><i class="ti-pencil-alt"></i></a>
+    
+                                <!-- Button trigger modal -->
+                                <a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal-{{ $row->id }}">
+                                    <i class="ti-trash"></i></a>
+                            </div>
+
                               <div class="card-body">
                                     <div class="row">
                                           <div class="col-md-4">
@@ -23,24 +30,24 @@
                                                       <table class="table table-striped">
                                                             <thead>
                                                                   <tr>
-                                                                  <th>
+                                                                    <th>
                                                                     @if($row->method == 'apiResource')
-                                                                    <code>
-                                                                    [GET] {{ $url }}/api/{{ $row->url }} <br><!---List Get Method--->
-                                                                    [POST] {{ $url }}/api/{{ $row->url }} <br>    <!---Store Post Method--->
-                                                                    [GET] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br><!---Show Get Method--->
-                                                                    [PUT] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Update Put Method--->
-                                                                    [DELETE] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Delete DELETE Method--->
-                                                                    </code>
-                                                                @else
-                                                                {{ $url }}/api/{{ $row->url }}
-                                                                @endif
-                                                                  </th>
+                                                                        <code>
+                                                                        [GET] {{ $url }}/api/{{ $row->url }} <br><!---List Get Method--->
+                                                                        [POST] {{ $url }}/api/{{ $row->url }} <br>    <!---Store Post Method--->
+                                                                        [GET] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br><!---Show Get Method--->
+                                                                        [PUT] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Update Put Method--->
+                                                                        [DELETE] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Delete DELETE Method--->
+                                                                        </code>
+                                                                    @else
+                                                                        {{ $url }}/api/{{ $row->url }}
+                                                                    @endif
+                                                                    </th>
                                                                   </tr>
                                                             </thead>
                                                       <tbody>
                                                             <tr>
-                                                                  <h5>Api</h5>
+                                                                <h5>Api</h5>
                                                             </tr>
                                                             </tbody>
                                                       </table>
@@ -48,8 +55,7 @@
                                           </div>
                                           <div class="col-md-8">
                                                 <div class="example mb-10">
-                                                    <h5>Body</h5>
-
+                                                    <h5 class="mt-2 ml-2">Body</h5>
                                                       <div class="example-code">
                                                           <span class="example-copy" data-toggle="tooltip" title="Copy code"></span>
                                                           <div class="example-highlight">
@@ -77,6 +83,7 @@
                               </div>
                         </div>
                   </div>
+                  @include('admin.layouts.inc.delete')
                 @endforeach 
             </div>
         </section>
