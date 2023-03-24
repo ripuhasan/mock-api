@@ -17,20 +17,20 @@ class MockApiController extends Controller
       *
       * @return \Illuminate\Http\Response
       */
-      public function __construct()
-      {
-          $this->middleware('permission:mock-api-view|mock-api-create|mock-api-update|mock-api-delete', ['only' => ['index']]);
-          $this->middleware('permission:mock-api-create', ['only' => ['create', 'store']]);
-          $this->middleware('permission:mock-api-update', ['only' => ['edit', 'update']]);
-          $this->middleware('permission:mock-api-delete', ['only' => ['destroy']]);
-          $this->page_title = 'User List';
-          $this->access = 'mock-api';
-          $this->key_word = 'Mock Api';
-          $this->path = 'admin.mock-api';
-          $this->route_store = 'admin.mock.api';
-          $this->route_destroy = 'admin.mock.api.destroy';
-          $this->route_update = 'admin.mock.api.update';
-      }
+    public function __construct()
+    {
+        $this->middleware('permission:mock-api-view|mock-api-create|mock-api-update|mock-api-delete', ['only' => ['index']]);
+        $this->middleware('permission:mock-api-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:mock-api-update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:mock-api-delete', ['only' => ['destroy']]);
+        $this->page_title = 'User List';
+        $this->access = 'mock-api';
+        $this->key_word = 'Mock Api';
+        $this->path = 'admin.mock-api';
+        $this->route_store = 'admin.mock.api';
+        $this->route_destroy = 'admin.mock.api.destroy';
+        $this->route_update = 'admin.mock.api.update';
+    }
 
     public function mockApi()
     {

@@ -1,0 +1,152 @@
+[
+      {
+          "name": "First Name",
+          "key": "firstName"
+      },
+      {
+          "name": "Last Name",
+          "key": "lastName"
+      },
+      {
+          "name": "Title",
+          "key": "title"
+      },
+      {
+          "name": "Suffix",
+          "key": "suffix"
+      },
+      {
+          "name": "Full Name",
+          "key": "name"
+      },
+      {
+          "name": "Username",
+          "key": "username"
+      },
+      {
+          "name": "Email",
+          "key": "email"
+      },
+      {
+          "name": "Safe Email",
+          "key": "safeEmail"
+      },
+      {
+          "name": "Free Email",
+          "key": "freeEmail"
+      },
+      {
+          "name": "Company Email",
+          "key": "companyEmail"
+      },
+      {
+          "name": "Password",
+          "key": "password"
+      },
+      {
+          "name": "Phone Number",
+          "key": "phoneNumber"
+      },
+      {
+          "name": "Toll-Free Phone Number",
+          "key": "tollFreePhoneNumber"
+      },
+      {
+          "name": "E164 Phone Number",
+          "key": "e164PhoneNumber"
+      },
+      {
+          "name": "Job Title",
+          "key": "jobTitle"
+      },
+      {
+          "name": "City",
+          "key": "city"
+      },
+      {
+          "name": "Street Name",
+          "key": "streetName"
+      },
+      {
+          "name": "Building Number",
+          "key": "buildingNumber"
+      },
+      {
+          "name": "Postal Code",
+          "key": "postcode"
+      },
+      {
+          "name": "Address",
+          "key": "address"
+      },
+      {
+          "name": "Country",
+          "key": "country"
+      },
+      {
+          "name": "Latitude",
+          "key": "latitude"
+      },
+      {
+          "name": "Longitude",
+          "key": "longitude"
+      },
+      {
+          "name": "Time Zone",
+          "key": "timeZone"
+      },
+      {
+          "name": "Credit Card Type",
+          "key": "creditCardType"
+      },
+      {
+          "name": "Credit Card Number",
+          "key": "creditCardNumber"
+      },
+      {
+          "name": "Credit Card Expiration Date",
+          "key": "creditCardExpirationDate"
+      },
+      {
+          "name": "Credit Card Expiration Date String",
+          "key": "creditCardExpirationDateString"
+      },
+      {
+          "name": "Credit Card Details",
+          "key": "creditCardDetails"
+      },
+      {
+          "name": "Bank Account Number",
+          "key": "bankAccountNumber"
+      },
+      {
+          "name": "IBAN",
+          "key": "iban"
+      },
+      {
+          "name": "SWIFT/BIC Number",
+          "key": "swiftBicNumber"
+      },
+      {
+          "name": "Word",
+          "key": "word"
+      },
+      {
+          "name": "Words",
+          "key": "words"
+      },
+      {
+          "name": "Sentence",
+          "key": "sentence"
+      },
+      {
+      "name": "Sentences",
+      "key": "sentences"
+      },
+      {
+      "name": "Paragraph",
+      "key": "paragraph"
+      }
+        
+]
+         

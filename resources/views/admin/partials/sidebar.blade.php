@@ -33,6 +33,10 @@
                   <li><a href="{{ route('admin.mock.api') }}"><i class="ti-close"></i>Create Mock Api</a></li>
                   <li><a href="{{ route('admin.mock.api.list') }}"><i class="ti-close"></i>Api List</a></li>
 
+
+                  <li><a href="{{ route('admin.custom.mock.api') }}"><i class="ti-close"></i>Create Custom Mock Api</a></li>
+                  <li><a href="{{ route('admin.mock.api.list') }}"><i class="ti-close"></i>Custom Api List</a></li>
+
                   <li><a class="sidebar-sub-toggle"><i class="ti-target"></i> Pages <span
                               class="sidebar-collapse-icon ti-angle-down"></span></a>
                       <ul>
