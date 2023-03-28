@@ -35,6 +35,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'mock-api-view', 'group' => 'MockApi', 'title' => 'View', 'guard_name' => 'web'],
             ['name' => 'mock-api-edit', 'group' => 'MockApi', 'title' => 'Edit', 'guard_name' => 'web'],
             ['name' => 'mock-api-delete', 'group' => 'MockApi', 'title' => 'Delete', 'guard_name' => 'web'],
+
+            ['name' => 'custom-mock-api-create', 'group' => 'MockApi', 'title' => 'Create', 'guard_name' => 'web'],
+            ['name' => 'custom-mock-api-view', 'group' => 'MockApi', 'title' => 'View', 'guard_name' => 'web'],
+            ['name' => 'custom-mock-api-edit', 'group' => 'MockApi', 'title' => 'Edit', 'guard_name' => 'web'],
+            ['name' => 'custom-mock-api-delete', 'group' => 'MockApi', 'title' => 'Delete', 'guard_name' => 'web'],
         ];
 
         DB::table('permissions')->insert($permissions);

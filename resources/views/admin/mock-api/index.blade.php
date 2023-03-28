@@ -64,12 +64,12 @@
                                                               <pre>
                                                        <code>
                                                         <?php
-                                                        if (!file_exists($model.'_'.$row->id.'.json')) {
+                                                        if (!file_exists('json_data/'.$model.'_'.$row->id.'.json')) {
                                                             echo "No json data found!";
                                                         }else{
-                                                            $json = file_get_contents($model.'_'.$row->id.'.json'); 
+                                                            $json = file_get_contents('json_data/'.$model.'_'.$row->id.'.json'); 
                                                             $json_decode = json_decode($json, true); 
-                                                            $limited_data = array_slice($json_decode, 0, 2); 
+                                                            $limited_data = array_slice($json_decode, 0, 2);
                     
                                                             echo json_encode($limited_data, JSON_PRETTY_PRINT);
                                                         }
