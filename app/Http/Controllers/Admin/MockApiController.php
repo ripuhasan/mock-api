@@ -50,7 +50,7 @@ class MockApiController extends Controller
             return redirect()->back()->with('message', 'Your api already exist!');
         }else{
             $request['method'] = 'apiResource';
-           $db = ApiUrl::create([
+            $db = ApiUrl::create([
                 'url' => $request->url,
                 'model' => $request->model,
                 'input_field' => $request->input_field,
