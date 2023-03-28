@@ -40,7 +40,9 @@
                                                                         [DELETE] {{ $url }}/api/{{ $row->url }}/&#123;id&#125; <br> <!---Delete DELETE Method--->
                                                                         </code>
                                                                     @else
-                                                                        {{ $url }}/api/{{ $row->url }}
+                                                                    <code>
+                                                                       [{{ Str::upper($row->method) }}] {{ $url }}/api/{{ $row->url }}
+                                                                    </code>
                                                                     @endif
                                                                     </th>
                                                                   </tr>

@@ -4,17 +4,41 @@ use Illuminate\Support\Str;
 
 class GenerateFile{
 
-      public static function generateApi($url, $controller)
+      public static function generateApi($request)
       {
-            $apiRoute = fopen("../routes/api.php", "a") or die("Unable to open file!");
-            $routeTest = "Route::apiResource('$url', $controller);\n";
+        $apiRoute = fopen("../routes/api.php", "a") or die("Unable to open file!");
+        
+        if($request->method == 'get'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "index"]';
+            $routeTest = "Route::get('$request->url', $controller);\n";
+        }elseif($request->method == 'put'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "update"]';
+            $routeTest = "Route::put('$request->url/{id}', $controller);\n";
+        }elseif($request->method == 'get_view'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "show"]';
+            $routeTest = "Route::get('$request->url/{id}', $controller);\n";
+        }elseif($request->method == 'post'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "store"]';
+            $routeTest = "Route::post('$request->url', $controller);\n";
+        }elseif($request->method == 'delete'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "destroy"]';
+            $routeTest = "Route::delete('$request->url/{id}', $controller);\n";
+        }else{
+            $controller = 'App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
+            $routeTest = "Route::$request->method('$request->url', $controller);\n";
+        }
+            
             fwrite($apiRoute, $routeTest);
             fclose($apiRoute);
       }
 
       public static function generateApiController($request, $db)
       {
-            $input_arrays = preg_split("/[\s,]+/", $request->input_field);
+          $input_arrays = $request->input_field;
+          if(!$request->type){
+                $input_arrays = preg_split("/[\s,]+/", $request->input_field);
+            }
+
             $con = '"';
             $data_index = '$data[$index]';
 
@@ -22,13 +46,27 @@ class GenerateFile{
             $input_field = [];
             $update_field = [];
 
+            if($request->type){
+                $input_data = $request->type;
+            }
+
             foreach($input_arrays as $key => $array){
+                
+                $type = $array;
+
+                if($request->type){
+                    $type = Str::slug($input_data[$key], '_');
+                }
+                
                 $input = $array;
-                $fi = $con.$input.$con. ' => '.'$faker->'.$input;
+
+                $fi = $con.$type.$con. ' => '.'$faker->'.$input;
                 array_push($field, $fi);
-                $field_input = $con.$input.$con. ' => ' .'$request->'.$input;
+
+                $field_input = $con.$type.$con. ' => ' .'$request->'.$input;
                 array_push($input_field, $field_input);
-                $field_update = $data_index.'['.$con.$input.$con.']'. ' = '.'$request->'.$input;
+
+                $field_update = $data_index.'['.$con.$type.$con.']'. ' = '.'$request->'.$input;
                 array_push($update_field, $field_update);
             }
       

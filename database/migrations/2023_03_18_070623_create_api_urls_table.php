@@ -18,6 +18,7 @@ class CreateApiUrlsTable extends Migration
             $table->string('url');
             $table->string('model');
             $table->string('method');
+            $table->string('type')->nullable();
             $table->text('input_field');
             $table->integer('total_data');
             $table->timestamps();

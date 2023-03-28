@@ -49,22 +49,18 @@ class MockApiController extends Controller
         if($db){
             return redirect()->back()->with('message', 'Your api already exist!');
         }else{
+            $request['method'] = 'apiResource';
            $db = ApiUrl::create([
                 'url' => $request->url,
                 'model' => $request->model,
                 'input_field' => $request->input_field,
-                'method' => 'apiResource',
+                'method' => $request->method,
                 'total_data' => $request->how_many_data,
             ]);
         }
 
-        $url = $request->url;
-
-        
-        $controller = 'Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
-
         //Generate Api Url
-        GenerateFile::generateApi($url, $controller);
+        GenerateFile::generateApi($request);
 
         //Generate Api Controller
         GenerateFile::generateApiController($request, $db);

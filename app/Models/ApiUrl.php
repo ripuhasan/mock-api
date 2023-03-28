@@ -10,6 +10,6 @@ class ApiUrl extends Model
     use HasFactory;
 
     protected $fillable = [
-        'url', 'model', 'input_field', 'method', 'total_data',
+        'url', 'model', 'type', 'input_field', 'method', 'total_data',
     ];
 }
