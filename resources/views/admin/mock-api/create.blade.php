@@ -72,13 +72,13 @@ userAgent, md5, sha1, sha256, locale, languageCode, currencyCode
                               <div class="col-md-6">
                                     <div class="form-group">
                                           <label>Url *</label>
-                                          <input type="text" class="form-control" name="url" placeholder="Enter Your Api Url" required>
+                                          <input type="text" class="form-control" id="url" name="url" onkeyup="setModelName(this.value)" placeholder="Enter Your Api Url" required>
                                     </div>
                               </div>
                               <div class="col-md-6">
                                     <div class="form-group">
                                           <label>Model *</label>
-                                          <input type="text" class="form-control" name="model" placeholder="Enter Model" required>
+                                          <input type="text" id="model" class="form-control" name="model" placeholder="Enter Model" required>
                                     </div>
                               </div>
                               </div>
@@ -291,5 +291,23 @@ userAgent, md5, sha1, sha256, locale, languageCode, currencyCode
         max : 10
     });
     tagInput1.addData(['firstName' , 'lastName' , 'phoneNumber', 'email'])
+
+
+
+function setModelName(input) {
+    if (input.length > 0) {
+        spaceless_input = input.replace(/\s/g, '');
+        document.getElementById('url').value = spaceless_input;
+        var keyword = spaceless_input.split(/[\/ ]+/).pop();
+        var capitalize_model = '';
+        keyword.split(/[- ]+/).forEach(function(item) {
+            if (item.length > 0) {
+                capitalize_model = capitalize_model + item[0].toUpperCase() + item.substring(1);
+            }
+        });
+        document.getElementById('model').value = capitalize_model;
+    }
+}
+
 </script>
 @endpush
