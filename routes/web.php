@@ -40,5 +40,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'auth'], fu
     Route::get('custom-mock-api', [App\Http\Controllers\Admin\CustomMockApiController::class, 'customMockApi'])->name('custom.mock.api');
     Route::get('custom-mock-api-list', [App\Http\Controllers\Admin\CustomMockApiController::class, 'customMockApiList'])->name('custom.mock.api.list');
     Route::post('custom-mock-api', [App\Http\Controllers\Admin\CustomMockApiController::class, 'customMockApiStore'])->name('custom.mock.api.store');
+    Route::get('custom-mock-api/{id}/edit', [App\Http\Controllers\Admin\CustomMockApiController::class, 'customMockApiEdit'])->name('custom.mock.api.edit');
+    Route::put('custom-mock-api-update/{id}', [App\Http\Controllers\Admin\CustomMockApiController::class, 'customMockApiUpdate'])->name('custom.mock.api.update');
 
 });

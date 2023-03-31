@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\FakerInputField;
 use App\Models\ApiUrl;
 use GenerateFile;
+use Helper;
 use stdClass;
 
 class CustomMockApiController extends Controller
@@ -46,6 +47,10 @@ class CustomMockApiController extends Controller
 
     public function customMockApiStore(Request $request)
     {
+        $path = 'json_data/'.$request->url;
+
+        $folderName = Helper::folderMake($path);
+
         $input_field = implode(', ', $request->input_field);
         $type = implode(', ', $request->type);
 
@@ -67,7 +72,7 @@ class CustomMockApiController extends Controller
         GenerateFile::generateApi($request);
 
         //Generate Api Controller
-        GenerateFile::generateApiController($request, $db);
+        GenerateFile::generateApiController($request, $db, $folderName);
 
         return redirect()->back()->with('message', 'Your api create success');
     }
@@ -83,7 +88,97 @@ class CustomMockApiController extends Controller
 
         $url = url('/');
         $rows = ApiUrl::where('method', '!=', 'apiResource')->get();
-        return view('admin.mock-api.index', compact('rows', 'info', 'url'));
+        return view('admin.custom-mock-api.index', compact('rows', 'info', 'url'));
+    }
+
+    public function customMockApiEdit($id)
+    {
+        $info = new stdClass();
+        $info->access = $this->access;
+        $info->key_word = $this->key_word;
+        $info->page_title = "Edit Custom Mock Api";
+        $info->route_update = 'admin.custom.mock.api.update';
+
+        $fields = FakerInputField::where('is_active', 1)->get();
+        $row = ApiUrl::findOrFail($id);
+
+        $types = explode(',', $row->type);
+        //First Space remove
+        $types = array_map(function ($element) {
+            return ltrim($element);
+        }, $types);
+        
+        $input_fields = explode(',', $row->input_field);
+        //First Space remove
+        $input_fields = array_map(function ($element) {
+            return ltrim($element);
+        }, $input_fields);
+
+        //'"' remove
+        $input_fields = str_replace('"', '', $input_fields);
+        // '[]' remove
+        $input_fields = str_replace(['[', ']'], '', $input_fields);
+
+        //Array combine
+        $selected_fields = array_combine($types, $input_fields);
+
+        return view('admin.custom-mock-api.edit', compact('info', 'row', 'fields', 'selected_fields'));
+    }
+
+    public function customMockApiUpdate(Request $request, $id)
+    {
+        $db = ApiUrl::findOrFail($id);
+
+        //Generate Api Url
+        GenerateFile::generateApi($request, $db);
+
+
+        //File check and remove
+        //Old Controller
+        $oldController = ucfirst(str_replace(" ", "", $db->model)).'Controller';
+        //Old json data
+        $old_json_data = Str::plural(strtolower(str_replace(" ", "", $db->model)));
+
+        //Controller File Delete
+        if(file_exists("../app/Http/Controllers/Api/{$oldController}.php")){
+            unlink("../app/Http/Controllers/Api/{$oldController}.php");
+        }
+        //Json file delete
+        if(file_exists("{$old_json_data}_{$db->id}.json")){
+            unlink("{$old_json_data}_{$db->id}.json");
+        }
+
+        //Update database
+        $input_field = implode(', ', $request->input_field);
+        $type = implode(', ', $request->type);
+
+        if($db){
+            $input_field = json_encode($request->input_field);
+            $db->update([
+                'url' => $request->url,
+                'model' => $request->model,
+                'method' => $request->method,
+                'input_field' => $input_field,
+                'type' => $type,
+            ]);
+            // return redirect()->back()->with('message', 'Your api update success!');
+        }else{
+           $db = ApiUrl::create([
+                'url' => $request->url,
+                'model' =>  $request->model,
+                'method' => $request->method,
+                'input_field' => $input_field,
+                'type' => $type,
+            ]);
+        }
+
+        $path = 'json_data/'.$request->url;
+
+        $folderName = Helper::folderMake($path);
+        //Generate Api Controller
+        GenerateFile::generateApiController($request, $db, $folderName);
+
+        return redirect()->back()->with('message', 'Your api update success!');
     }
 
 }

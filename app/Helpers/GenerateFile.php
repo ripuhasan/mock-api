@@ -1,35 +1,72 @@
 <?php
 
 use Illuminate\Support\Str;
+use App\Models\ApiUrl;
 
 class GenerateFile{
 
-      public static function generateApi($request)
+      public static function generateApi($request, $db = null)
       {
+
+        $url = ApiUrl::getUrl($request->url, $request->method);
+        $method = ApiUrl::getMethod($request->method);
+        $routeMethod = ApiUrl::getRouteMethod($request->method);
+
+
         $apiRoute = fopen("../routes/api.php", "a") or die("Unable to open file!");
-        
-        if($request->method == 'get'){
-            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "index"]';
-            $routeTest = "Route::get('$request->url', $controller);\n";
-        }elseif($request->method == 'put'){
-            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "update"]';
-            $routeTest = "Route::put('$request->url/{id}', $controller);\n";
-        }elseif($request->method == 'get_view'){
-            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "show"]';
-            $routeTest = "Route::get('$request->url/{id}', $controller);\n";
-        }elseif($request->method == 'post'){
-            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "store"]';
-            $routeTest = "Route::post('$request->url', $controller);\n";
-        }elseif($request->method == 'delete'){
-            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "destroy"]';
-            $routeTest = "Route::delete('$request->url/{id}', $controller);\n";
+
+        if($request->method != 'apiResource'){
+            $controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "'.$method.'"]';
+            $routeTest = "Route::$routeMethod('$url', $controller);\n";
+
+            if($db){
+                $oldMethod = ApiUrl::getMethod($db->method);
+                $oldRouteMethod = ApiUrl::getRouteMethod($db->method);
+
+                //Old controller
+                $old_controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $db->model)).'Controller::class, "'.$oldMethod.'"]';
+                //Update Controller
+                $update_controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "'.$method.'"]';
+
+                $apiRouteFile = '../routes/api.php';
+                $apiRoute = file_get_contents($apiRouteFile);
+
+                // Define the old string and new string
+                $search_url = "Route::$oldRouteMethod('$db->url', $old_controller);";
+                $update_url = "Route::$routeMethod('$url', $controller);\n";
+
+                // Replace the old string with new string
+                $routeTest = str_replace($search_url, $update_url, $apiRoute);
+                $apiRoute = fopen($apiRouteFile, "w") or die("Unable to open file!");
+
+                fwrite($apiRoute, $routeTest);
+                fclose($apiRoute);
+            }
+
         }else{
             $controller = 'Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
-            $routeTest = "Route::$request->method('$request->url', $controller);\n";
+            $routeTest = "Route::$routeMethod('$url', $controller);\n";
+
+            if($db){
+                $oldRouteMethod = ApiUrl::getRouteMethod($db->method);
+
+                //Old controller
+                $old_controller = 'Api\\'.ucfirst(str_replace(" ", "", $db->model)).'Controller::class';
+
+                //Update Controller
+                $update_controller = 'Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class';
+                // Define the old string and new string
+                $search_url = "Route::$oldRouteMethod('$db->url', $old_controller);";
+                $update_url = "Route::$routeMethod('$request->url', $update_controller);";
+    
+                // Replace the old string with new string
+                $routeTest = str_replace($search_url, $update_url, $apiRoute);
+            }
         }
-            
+
             fwrite($apiRoute, $routeTest);
             fclose($apiRoute);
+
       }
 
       public static function generateApiController($request, $db, $folderName)
