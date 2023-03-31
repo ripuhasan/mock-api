@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Str;
-use Faker\Factory as Faker;
 
 class GenerateFile{
 
@@ -33,13 +32,9 @@ class GenerateFile{
             fclose($apiRoute);
       }
 
-      public static function generateApiController($request, $db)
+      public static function generateApiController($request, $db, $folderName)
       {
-          $input_arrays = $request->input_field;
-          if(!$request->type){
-                $input_arrays = preg_split("/[\s,]+/", $request->input_field);
-            }
-
+            $input_arrays = $request->input_field;
             $con = '"';
             $data_index = '$data[$index]';
 
@@ -71,6 +66,7 @@ class GenerateFile{
                 array_push($update_field, $field_update);
             }
       
+            //impload array to string conversation
             $final_field = implode(', ', $field);
             $final_input_field = implode(', ', $input_field);
             $final_update_field = implode('; ', $update_field);
@@ -83,11 +79,11 @@ class GenerateFile{
             $model_url = Str::plural(strtolower(str_replace(" ", "", $request->model)));
 
             //Fake data generate
-            $fakeData = Self::generateFackData($how_many_data, $final_field);
+            $fakeData = Helper::generateFackData($how_many_data, $final_field);
             // Convert the data to JSON format
             $jsonData = json_encode($fakeData);
 
-            $fileUrl = public_path('json_data\\'.$model_url.'_'.$db->id.'.json');
+            $fileUrl = public_path($folderName.'/'.$model_url.'_'.$db->id.'.json');
             // Save the JSON data to a file
             file_put_contents($fileUrl, $jsonData);
 
@@ -110,8 +106,8 @@ class GenerateFile{
          */
         public function index()
         {
-            if (file_exists('json_data/{$model_url}_{$db->id}.json')) {
-                \$data = file_get_contents('json_data/{$model_url}_{$db->id}.json');
+            if (file_exists('{$folderName}/{$model_url}_{$db->id}.json')) {
+                \$data = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
                 \$data = json_decode(\$data);
                 
                 return response()->json(\$data);
@@ -132,7 +128,7 @@ class GenerateFile{
         {
             try{
                 // Load JSON file contents into a string variable
-                \$json_string = file_get_contents('json_data/{$model_url}_{$db->id}.json');
+                \$json_string = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
 
                 // Convert JSON string to a PHP array
                 \$data = json_decode(\$json_string, true);
@@ -147,7 +143,7 @@ class GenerateFile{
                 \$json_string = json_encode(\$data);
 
                 // Write JSON string to file
-                file_put_contents('{$model_url}_{$db->id}.json', \$json_string);
+                file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_string);
 
                 return response()->json([
                     $con success $con => true,
@@ -173,7 +169,7 @@ class GenerateFile{
         public function show(\$id)
         {
             // Load JSON file contents into a string variable
-            \$json_string = file_get_contents('json_data/{$model_url}_{$db->id}.json');
+            \$json_string = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
 
             // Convert JSON string to a PHP associative array
             \$data = json_decode(\$json_string, true);
@@ -207,7 +203,7 @@ class GenerateFile{
         {
             try{
                 // Load JSON file contents into a string variable
-                \$json_string = file_get_contents('json_data/{$model_url}_{$db->id}.json');
+                \$json_string = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
 
                 // Convert JSON string to a PHP associative array
                 \$data = json_decode(\$json_string, true);
@@ -225,7 +221,7 @@ class GenerateFile{
                 \$json_data = json_encode(\$data, JSON_PRETTY_PRINT);
 
                 // Write the updated JSON data back to the file
-                file_put_contents('{$model_url}_{$db->id}.json', \$json_data);
+                file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_data);
                 return response()->json([
                     $con success $con => true,
                     $con message $con => $con Update success $con
@@ -248,7 +244,7 @@ class GenerateFile{
         {
             try{
                 // Load JSON file contents into a string variable
-                \$json_string = file_get_contents('json_data/{$model_url}_{$db->id}.json');
+                \$json_string = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
 
                 // Convert JSON string to a PHP associative array
                 \$data = json_decode(\$json_string, true);
@@ -261,7 +257,7 @@ class GenerateFile{
                 \$json_string = json_encode(\$data);
 
                 // Save updated JSON string to file
-                file_put_contents('{$model_url}_{$db->id}.json', \$json_string);
+                file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_string);
 
                 return response()->json([
                     $con success $con => true,
@@ -282,25 +278,5 @@ class GenerateFile{
         fclose($controllerMake);
 
       }
-
-    public static function generateFackData($how_many_data, $final_field)
-    {
-        $faker = Faker::create();
-
-        $data = [];
-
-        $fields = explode(',', $final_field);
-
-        for ($i = 0; $i < $how_many_data; $i++) {
-            $row = [];
-            foreach ($fields as $field) {
-                [$key, $value] = explode('=>', $field);
-                $row[$key] = $faker->$value;
-            }
-            $data[] = $row;
-        }
-        return $data;
-    }
-
 
 }

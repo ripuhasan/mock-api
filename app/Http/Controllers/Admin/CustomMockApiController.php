@@ -71,4 +71,19 @@ class CustomMockApiController extends Controller
 
         return redirect()->back()->with('message', 'Your api create success');
     }
+
+    public function customMockApiList()
+    {
+        $info = new stdClass();
+        $info->access = $this->access;
+        $info->key_word = $this->key_word;
+        $info->page_title = "Mock Api List";
+        $info->route_store = $this->route_store;
+        $info->route_destroy = $this->route_destroy;
+
+        $url = url('/');
+        $rows = ApiUrl::where('method', '!=', 'apiResource')->get();
+        return view('admin.mock-api.index', compact('rows', 'info', 'url'));
+    }
+
 }

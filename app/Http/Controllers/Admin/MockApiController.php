@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\FakerInputField;
 use App\Models\ApiUrl;
 use GenerateFile;
+use Helper;
 use stdClass;
 
 class MockApiController extends Controller
@@ -40,20 +42,28 @@ class MockApiController extends Controller
         $info->page_title = "Mock Api Create";
         $info->route_store = $this->route_store;
 
-        return view('admin.mock-api.create', compact('info'));
+        $fields = FakerInputField::where('is_active', 1)->get();
+
+        return view('admin.mock-api.create', compact('info', 'fields'));
     }
 
     public function mockApiStore(Request $request)
     {
         $db = ApiUrl::where('url', $request->url)->first();
+
+        $path = 'json_data/'.$request->url;
+
+        $folderName = Helper::folderMake($path);
+
         if($db){
             return redirect()->back()->with('message', 'Your api already exist!');
         }else{
             $request['method'] = 'apiResource';
+            $input_field = json_encode($request->input_field);
             $db = ApiUrl::create([
                 'url' => $request->url,
                 'model' => $request->model,
-                'input_field' => $request->input_field,
+                'input_field' => $input_field,
                 'method' => $request->method,
                 'total_data' => $request->how_many_data,
             ]);
@@ -63,7 +73,7 @@ class MockApiController extends Controller
         GenerateFile::generateApi($request);
 
         //Generate Api Controller
-        GenerateFile::generateApiController($request, $db);
+        GenerateFile::generateApiController($request, $db, $folderName);
 
         return redirect()->back()->with('message', 'Your api create success');
     }
@@ -78,7 +88,7 @@ class MockApiController extends Controller
         $info->route_destroy = $this->route_destroy;
 
         $url = url('/');
-        $rows = ApiUrl::get();
+        $rows = ApiUrl::where('method', 'apiResource')->get();
         return view('admin.mock-api.index', compact('rows', 'info', 'url'));
     }
 
@@ -90,8 +100,15 @@ class MockApiController extends Controller
         $info->page_title = "Mock Api Edit";
         $info->route_update = $this->route_update;
 
+        $fields = FakerInputField::where('is_active', 1)->get();
         $row = ApiUrl::findOrFail($id);
-        return view('admin.mock-api.edit', compact('row', 'info'));
+        //convert array
+        $selected_fields = explode(',', $row->input_field);
+        //remove '"' and '[]'
+        $selected_fields = str_replace('"', '', $selected_fields);
+        $selected_fields = str_replace(['[', ']'], '', $selected_fields);
+
+        return view('admin.mock-api.edit', compact('row', 'info', 'fields', 'selected_fields'));
     }
 
     public function MockApiUpdate(Request $request, $id)
@@ -135,11 +152,12 @@ class MockApiController extends Controller
 
         //Update database
         if($db){
+            $input_field = json_encode($request->input_field);
             $db->update([
                 'url' => $request->url,
                 'model' => $request->model,
                 'method' => 'apiResource',
-                'input_field' => $request->input_field,
+                'input_field' => $input_field,
             ]);
             // return redirect()->back()->with('message', 'Your api update success!');
         }else{
@@ -159,8 +177,11 @@ class MockApiController extends Controller
         //Generate Api Url
        // GenerateFile::generateApi($url, $controller);
 
+        $path = 'json_data/'.$request->url;
+
+        $folderName = Helper::folderMake($path);
         //Generate Api Controller
-        GenerateFile::generateApiController($request, $db);
+        GenerateFile::generateApiController($request, $db, $folderName);
 
         return redirect()->back()->with('message', 'Your api update success!');
 
