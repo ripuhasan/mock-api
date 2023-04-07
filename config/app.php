@@ -168,6 +168,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
         /*
          * Application Service Providers...
          */

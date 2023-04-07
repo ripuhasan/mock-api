@@ -28,19 +28,19 @@ class GenerateFile{
                 //Update Controller
                 $update_controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "'.$method.'"]';
 
-                $apiRouteFile = '../routes/api.php';
-                $apiRoute = file_get_contents($apiRouteFile);
+                // $apiRouteFile = '../routes/api.php';
+                // $apiRoute = file_get_contents($apiRouteFile);
 
                 // Define the old string and new string
                 $search_url = "Route::$oldRouteMethod('$db->url', $old_controller);";
                 $update_url = "Route::$routeMethod('$url', $controller);\n";
 
                 // Replace the old string with new string
-                $routeTest = str_replace($search_url, $update_url, $apiRoute);
-                $apiRoute = fopen($apiRouteFile, "w") or die("Unable to open file!");
+                // $routeTest = str_replace($search_url, $update_url, $apiRoute);
+                // $apiRoute = fopen($apiRouteFile, "w") or die("Unable to open file!");
 
-                fwrite($apiRoute, $routeTest);
-                fclose($apiRoute);
+                // fwrite($apiRoute, $routeTest);
+                // fclose($apiRoute);
             }
 
         }else{
