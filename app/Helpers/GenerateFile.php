@@ -109,7 +109,7 @@ class GenerateFile{
             $final_update_field = implode('; ', $update_field);
 
             //uc first
-            $modelName = ucfirst(str_replace(" ", "", $request->model)).'Controller';
+            $modelNameController = ucfirst(str_replace(" ", "", $request->model)).'Controller';
             $how_many_data = $request->how_many_data;
 
             //Str lower & plural
@@ -125,7 +125,13 @@ class GenerateFile{
             file_put_contents($fileUrl, $jsonData);
 
 
-        $controllerMake = fopen("../app/Http/Controllers/Api/{$modelName}.php", "w") or die("Unable to open file!");
+
+           $getIndex = Swagger::getIndex($db);
+           $store = Swagger::store($db);
+
+
+
+        $controllerMake = fopen("../app/Http/Controllers/Api/{$modelNameController}.php", "w") or die("Unable to open file!");
         $controllerText = "<?php
 
     namespace App\Http\Controllers\Api;
@@ -134,13 +140,16 @@ class GenerateFile{
     use Illuminate\Http\Request;
     use Faker\Factory as Faker;
     
-    class {$modelName} extends Controller
+    class {$modelNameController} extends Controller
     {
         /**
          * Display a listing of the resource.
          *
          * @return \Illuminate\Http\Response
          */
+
+         $getIndex
+
         public function index()
         {
             if (file_exists('{$folderName}/{$model_url}_{$db->id}.json')) {
@@ -161,6 +170,9 @@ class GenerateFile{
          * @param  \Illuminate\Http\Request  \$request
          * @return \Illuminate\Http\Response
          */
+
+         $store
+         
         public function store(Request \$request)
         {
             try{

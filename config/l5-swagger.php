@@ -5,7 +5,15 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'path' => '/api/documentation',
+                'routes' => [
+                    [
+                        'path' => '/',
+                        'middleware' => [],
+                        'methods' => ['GET', 'POST', 'PUT', 'DELETE'],
+                    ],
+                    // Add additional API resource routes here
+                ],
             ],
 
             'routes' => [
