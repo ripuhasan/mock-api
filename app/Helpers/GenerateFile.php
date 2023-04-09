@@ -128,6 +128,9 @@ class GenerateFile{
 
            $getIndex = Swagger::getIndex($db);
            $store = Swagger::store($db);
+           $show = Swagger::show($db);
+           $update = Swagger::update($db);
+           $delete = Swagger::delete($db);
 
 
 
@@ -150,11 +153,25 @@ class GenerateFile{
 
          $getIndex
 
-        public function index()
+        public function index(Request \$request)
         {
+            \$limit = \$request->limit ?: 15;
+            \$order = \$request->order == 'asc' ? 'asc' : 'desc';
+
             if (file_exists('{$folderName}/{$model_url}_{$db->id}.json')) {
                 \$data = file_get_contents('{$folderName}/{$model_url}_{$db->id}.json');
                 \$data = json_decode(\$data);
+
+                // Order the data by the id field in the specified order
+                if (\$order == 'asc') {
+                    \$data = collect(\$data)->sortBy('id');
+                } else {
+                    \$data = collect(\$data)->sortByDesc('id');
+                }
+
+
+                // Limit the results to 10
+                \$data = \$data->take(\$limit);
                 
                 return response()->json(\$data);
             }
@@ -215,6 +232,9 @@ class GenerateFile{
          * @param  int  \$id
          * @return \Illuminate\Http\Response
          */
+
+         $show
+
         public function show(\$id)
         {
             // Load JSON file contents into a string variable
@@ -248,6 +268,9 @@ class GenerateFile{
          * @param  int  \$id
          * @return \Illuminate\Http\Response
          */
+
+         $update
+
         public function update(Request \$request, \$id)
         {
             try{
@@ -289,6 +312,9 @@ class GenerateFile{
          * @param  int  \$id
          * @return \Illuminate\Http\Response
          */
+
+         $delete
+
         public function destroy(\$id)
         {
             try{

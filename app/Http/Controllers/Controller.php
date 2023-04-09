@@ -10,11 +10,11 @@ use Illuminate\Routing\Controller as BaseController;
 /**
  * @OA\Info(
  *     version="1.0.0",
- *     title="Kodementor Api Documentation",
- *     description="Kodementor Api Documentation",
+ *     title="BitaSoft Api Documentation",
+ *     description="BitaSoft Api Documentation",
  *     @OA\Contact(
- *         name="Vijay Rana",
- *         email="info@kodementor.com"
+ *         name="Bita Soft",
+ *         email="bitasoft22@gmail.com"
  *     ),
  * ),
  */

@@ -8,7 +8,7 @@ return [
                 'path' => '/api/documentation',
                 'routes' => [
                     [
-                        'path' => '/',
+                        'path' => 'api/',
                         'middleware' => [],
                         'methods' => ['GET', 'POST', 'PUT', 'DELETE'],
                     ],
