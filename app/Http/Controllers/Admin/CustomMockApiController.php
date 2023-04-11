@@ -51,7 +51,8 @@ class CustomMockApiController extends Controller
 
         $folderName = Helper::folderMake($path);
 
-        $input_field = implode(', ', $request->input_field);
+        // $input_field = implode(', ', $request->input_field);
+        $input_field = json_encode($request->input_field);
         $type = implode(', ', $request->type);
 
         $db = ApiUrl::where('url', $request->url)->where('method', 'apiResource')->first();

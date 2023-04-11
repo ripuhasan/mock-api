@@ -28,19 +28,10 @@ class GenerateFile{
                 //Update Controller
                 $update_controller = '[App\Http\Controllers\Api\\'.ucfirst(str_replace(" ", "", $request->model)).'Controller::class, "'.$method.'"]';
 
-                // $apiRouteFile = '../routes/api.php';
-                // $apiRoute = file_get_contents($apiRouteFile);
-
                 // Define the old string and new string
                 $search_url = "Route::$oldRouteMethod('$db->url', $old_controller);";
                 $update_url = "Route::$routeMethod('$url', $controller);\n";
 
-                // Replace the old string with new string
-                // $routeTest = str_replace($search_url, $update_url, $apiRoute);
-                // $apiRoute = fopen($apiRouteFile, "w") or die("Unable to open file!");
-
-                // fwrite($apiRoute, $routeTest);
-                // fclose($apiRoute);
             }
 
         }else{
@@ -124,15 +115,12 @@ class GenerateFile{
             // Save the JSON data to a file
             file_put_contents($fileUrl, $jsonData);
 
-
-
-           $getIndex = Swagger::getIndex($db);
-           $store = Swagger::store($db);
-           $show = Swagger::show($db);
-           $update = Swagger::update($db);
-           $delete = Swagger::delete($db);
-
-
+            //Swagger Controller
+            $getIndex = Swagger::getIndex($db);
+            $store = Swagger::store($db);
+            $show = Swagger::show($db);
+            $update = Swagger::update($db);
+            $delete = Swagger::delete($db);
 
         $controllerMake = fopen("../app/Http/Controllers/Api/{$modelNameController}.php", "w") or die("Unable to open file!");
         $controllerText = "<?php
@@ -212,15 +200,15 @@ class GenerateFile{
                 file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_string);
 
                 return response()->json([
-                    $con success $con => true,
-                    $con message $con => $con Store success $con,
-                    $con data $con => \$new_data
+                    \"success\" => true,
+                    \"message\" => \"Store success\",
+                    \"data\" => \$new_data
                 ]);
             }catch(\Exception \$e){
                 return response()->json([
-                    $con success $con => false,
-                    $con message $con => $con Store fail! $con, \$e,
-                    $con data $con => \$new_data
+                    \"success\" => false,
+                    \"message\" => \"Store fail!\", \$e,
+                    \"data\" => \$new_data
                 ]);
             }
 
@@ -255,8 +243,8 @@ class GenerateFile{
                 return response()->json(\$record);
             } else {
                 return response()->json([
-                    $con success $con => false,
-                    $con message $con => $con No data found! $con
+                    \"success\" => false,
+                    \"message\" => \"No data found!\"
                 ]);
             }
         }
@@ -295,13 +283,13 @@ class GenerateFile{
                 // Write the updated JSON data back to the file
                 file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_data);
                 return response()->json([
-                    $con success $con => true,
-                    $con message $con => $con Update success $con
+                    \"success\" => true,
+                    \"message\" => \"Update success\"
                 ]);
             }catch(\Exception \$e){
                 return response()->json([
-                    $con success $con => false,
-                    $con message $con => $con Update fail! $con, \$e
+                    \"success\" => false,
+                    \"message\" => \"Update fail!\", \$e
                 ]);
             }
         }
@@ -335,13 +323,13 @@ class GenerateFile{
                 file_put_contents('{$folderName}/{$model_url}_{$db->id}.json', \$json_string);
 
                 return response()->json([
-                    $con success $con => true,
-                    $con message $con => $con Delete success $con
+                    \"success\" => true,
+                    \"message\" => \"Delete success\"
                 ]);
             }catch(\Exception \$e){
                 return response()->json([
-                    $con success $con => false,
-                    $con message $con => $con Delete fail! $con, \$e
+                    \"success\" => false,
+                    \"message\" => \"Delete fail!\", \$e
                 ]);
             }
 
