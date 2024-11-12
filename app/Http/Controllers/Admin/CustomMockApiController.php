@@ -24,20 +24,13 @@ class CustomMockApiController extends Controller
         $this->middleware('permission:custom-mock-api-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:custom-mock-api-update', ['only' => ['edit', 'update']]);
         $this->middleware('permission:custom-mock-api-delete', ['only' => ['destroy']]);
-        $this->page_title = 'User List';
-        $this->access = 'custom-mock-api';
-        $this->key_word = 'Custom Mock Api';
-        $this->path = 'admin.custom-mock-api';
-        $this->route_store = 'admin.mock.api';
-        $this->route_destroy = 'admin.mock.api.destroy';
-        $this->route_update = 'admin.mock.api.update';
     }
 
     public function customMockApi()
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'custom-mock-api';
+        $info->key_word = 'Custom Mock Api';
         $info->page_title = "Custom Mock Api Create";
         $info->route_store = 'admin.custom.mock.api.store';
 
@@ -81,11 +74,11 @@ class CustomMockApiController extends Controller
     public function customMockApiList()
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'custom-mock-api';
+        $info->key_word = 'Custom Mock Api';
         $info->page_title = "Mock Api List";
-        $info->route_store = $this->route_store;
-        $info->route_destroy = $this->route_destroy;
+        $info->route_store = 'admin.custom.mock.api.store';
+        $info->route_destroy = 'admin.mock.api.destroy';
 
         $url = url('/');
         $rows = ApiUrl::where('method', '!=', 'apiResource')->get();
@@ -95,8 +88,8 @@ class CustomMockApiController extends Controller
     public function customMockApiEdit($id)
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'custom-mock-api';
+        $info->key_word = 'Custom Mock Api';
         $info->page_title = "Edit Custom Mock Api";
         $info->route_update = 'admin.custom.mock.api.update';
 

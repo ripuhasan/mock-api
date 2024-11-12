@@ -24,17 +24,6 @@ class UserController extends Controller
           $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
           $this->middleware('permission:user-update', ['only' => ['edit', 'update']]);
           $this->middleware('permission:user-delete', ['only' => ['destroy']]);
-          $this->page_title = 'User List';
-          $this->access = 'user';
-          $this->key_word = 'User';
-          $this->path = 'admin.users';
-          $this->route_index = 'admin.users.index';
-          $this->route_create = 'admin.users.create';
-          $this->route_show = 'admin.users.show';
-          $this->route_edit = 'admin.users.edit';
-          $this->route_update = 'admin.users.update';
-          $this->route_destroy = 'admin.users.destroy';
-          $this->route_store = 'admin.users.store';
       }
 
     /**
@@ -45,18 +34,18 @@ class UserController extends Controller
     public function index()
     {
         $info = new stdClass();
-        $info->page_title = $this->page_title;
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
-        $info->route_index = $this->route_index;
-        $info->route_store = $this->route_store;
-        $info->route_show = $this->route_show;
-        $info->route_edit = $this->route_edit;
-        $info->route_destroy = $this->route_destroy;
+        $info->page_title = 'User List';
+        $info->access = 'user';
+        $info->key_word = 'User';
+        $info->route_index = 'admin.users.index';
+        $info->route_store = 'admin.users.store';
+        $info->route_show = 'admin.users.show';
+        $info->route_edit = 'admin.users.edit';
+        $info->route_destroy = 'admin.users.destroy';
 
         $rows = User::orderBy('id', 'DESC')->get();
 
-        return view($this->path.'.index', compact('rows', 'info'));
+        return view('admin.users.index', compact('rows', 'info'));
     }
 
     /**
@@ -67,16 +56,16 @@ class UserController extends Controller
     public function create()
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'user';
+        $info->key_word = 'User';
         $info->page_title = "User Create";
-        $info->route_index = $this->route_index;
-        $info->route_store = $this->route_store;
-        $info->route_show = $this->route_show;
-        $info->route_edit = $this->route_edit;
-        $info->route_destroy = $this->route_destroy;
+        $info->route_index = 'admin.users.index';
+        $info->route_store = 'admin.users.store';
+        $info->route_show = 'admin.users.show';
+        $info->route_edit = 'admin.users.edit';
+        $info->route_destroy = 'admin.users.destroy';
 
-        return view($this->path.'.create', compact('info'));
+        return view('admin.users.create', compact('info'));
     }
 
     /**
@@ -93,8 +82,8 @@ class UserController extends Controller
                'password' => Hash::make($request->password),
           ]);
        
-       Toastr::success('Created Success!', $this->key_word);
-       return redirect()->route($this->route_index);
+       Toastr::success('Created Success!', 'success');
+       return redirect()->route('admin.users.index');
     }
 
     /**
@@ -105,7 +94,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return redirect()->route($this->route_index);
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -117,17 +106,17 @@ class UserController extends Controller
     public function edit($id)
     {
         $info = new stdClass();
-        $info->page_title = 'Edit '.$this->key_word;
-        $info->key_word = $this->key_word;
-        $info->access = $this->access;
-        $info->route_index = $this->route_index;
-        $info->route_update = $this->route_update;
-        $info->route_show = $this->route_show;
-        $info->route_edit = $this->route_edit;
-        $info->route_destroy = $this->route_destroy;
+        $info->page_title = 'Edit User';
+        $info->key_word = 'User';
+        $info->access = 'user';
+        $info->route_index = 'admin.users.index';
+        $info->route_update = 'admin.users.update';
+        $info->route_show = 'admin.users.show';
+        $info->route_edit = 'admin.users.edit';
+        $info->route_destroy = 'admin.users.destroy';
 
         $row = User::findOrFail($id);
-        return view($this->path.'.edit', compact('row', 'info'));
+        return view('admin.users.edit', compact('row', 'info'));
     }
 
     /**
@@ -147,8 +136,8 @@ class UserController extends Controller
           'password' => Hash::make($request->password),
      ]);
 
-        Toastr::success('Updated Success!', $this->key_word);
-        return redirect()->route($this->route_index);
+        Toastr::success('Updated Success!', 'success');
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -162,10 +151,10 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         if($user->deletable){
             $user->delete();
-          Toastr::success('Delete Success!', $this->key_word);
-          return redirect()->route($this->route_index);
+          Toastr::success('Delete Success!', 'success');
+          return redirect()->route('admin.users.index');
         }
-        Toastr::error('Delete Fail!', $this->key_word);
-        return redirect()->route($this->route_index);
+        Toastr::error('Delete Fail!', 'fail');
+        return redirect()->route('admin.users.index');
     }
 }

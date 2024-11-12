@@ -18,3 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('admin/v1/users', [App\Http\Controllers\Api\UserController::class, "index"]);
+Route::apiResource('product/list', Api\ListController::class);
+Route::get('customer/details', [App\Http\Controllers\Api\CustomerController::class, "index"]);

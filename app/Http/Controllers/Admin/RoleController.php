@@ -47,18 +47,18 @@ class RoleController extends Controller
     public function index()
     {
         $info = new stdClass();
-        $info->page_title = $this->page_title;
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
-        $info->route_index = $this->route_index;
-        $info->route_store = $this->route_store;
-        $info->route_show = $this->route_show;
-        $info->route_edit = $this->route_edit;
-        $info->route_destroy = $this->route_destroy;
+        $info->page_title = 'Role List';
+        $info->access = 'role';
+        $info->key_word = 'Role';
+        $info->route_index = 'admin.roles.index';
+        $info->route_store = 'admin.roles.store';
+        $info->route_show = 'admin.roles.show';
+        $info->route_edit = 'admin.roles.edit';
+        $info->route_destroy = 'admin.roles.destroy';
 
         $rows = Role::orderBy('id', 'DESC')->get();
         $permission = Permission::get();
-        return view($this->path.'.index', compact('rows', 'permission', 'info'));
+        return view('admin.roles.index', compact('rows', 'permission', 'info'));
     }
 
     /**
@@ -98,9 +98,9 @@ class RoleController extends Controller
     public function show($id)
     {
         $info = new stdClass();
-        $info->route_destroy = $this->route_destroy;
-        $info->page_title = $this->page_title;
-        $info->key_word = $this->key_word;
+        $info->route_destroy = 'admin.roles.destroy';
+        $info->page_title = 'Role Details';
+        $info->key_word = 'Role';
 
         $row = Role::find($id);
 
@@ -108,7 +108,7 @@ class RoleController extends Controller
             ->where("role_has_permissions.role_id",$id)
             ->get();
 
-        return view($this->path.'.show', compact('row', 'rolePermissions', 'info'));
+        return view('admin.roles.show', compact('row', 'rolePermissions', 'info'));
     }
 
     /**
@@ -120,7 +120,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $info = new stdClass();
-        $info->route_destroy = $this->route_destroy;
+        $info->route_destroy = 'admin.roles.destroy';
 
         $row = Role::find($id);
         $rows = Role::orderBy('id', 'DESC')->get();
@@ -129,7 +129,7 @@ class RoleController extends Controller
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->get();
 
-        return view($this->path.'.edit', compact('row', 'rows', 'permission', 'rolePermissions', 'info'));
+        return view('admin.roles.edit', compact('row', 'rows', 'permission', 'rolePermissions', 'info'));
     }
 
     /**

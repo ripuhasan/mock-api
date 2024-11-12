@@ -25,22 +25,15 @@ class MockApiController extends Controller
         $this->middleware('permission:mock-api-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:mock-api-update', ['only' => ['edit', 'update']]);
         $this->middleware('permission:mock-api-delete', ['only' => ['destroy']]);
-        $this->page_title = 'User List';
-        $this->access = 'mock-api';
-        $this->key_word = 'Mock Api';
-        $this->path = 'admin.mock-api';
-        $this->route_store = 'admin.mock.api';
-        $this->route_destroy = 'admin.mock.api.destroy';
-        $this->route_update = 'admin.mock.api.update';
     }
 
     public function mockApi()
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'mock-api';
+        $info->key_word = 'Mock Api';
         $info->page_title = "Mock Api Create";
-        $info->route_store = $this->route_store;
+        $info->route_store = 'admin.mock.api';
 
         $fields = FakerInputField::where('is_active', 1)->get();
 
@@ -81,11 +74,11 @@ class MockApiController extends Controller
     public function mockApiList()
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'mock-api';
+        $info->key_word = 'Mock Api';
         $info->page_title = "Mock Api List";
-        $info->route_store = $this->route_store;
-        $info->route_destroy = $this->route_destroy;
+        $info->route_store = 'admin.mock.api';
+        $info->route_destroy = 'admin.mock.api.destroy';
 
         $url = url('/');
         $rows = ApiUrl::where('method', 'apiResource')->get();
@@ -95,10 +88,10 @@ class MockApiController extends Controller
     public function MockApiEdit($id)
     {
         $info = new stdClass();
-        $info->access = $this->access;
-        $info->key_word = $this->key_word;
+        $info->access = 'mock-api';
+        $info->key_word = 'Mock Api';
         $info->page_title = "Mock Api Edit";
-        $info->route_update = $this->route_update;
+        $info->route_update = 'admin.mock.api.update';
 
         $fields = FakerInputField::where('is_active', 1)->get();
         $row = ApiUrl::findOrFail($id);
